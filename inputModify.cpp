@@ -1,8 +1,8 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#define IN freopen("Routemap_BikolpoBus.txt", "r", stdin);
-#define OUT freopen("in.txt", "w", stdout);
+#define IN freopen("Routemap_UttaraBus_tasfik.txt", "r", stdin);
+#define OUT freopen("Roadmap_UttaraBus.txt", "w", stdout);
 #define ll long long int
 #define PII pair <int, int>
 #define MX 100001
