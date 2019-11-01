@@ -15,9 +15,10 @@ int main()
 	for (int i = 0; i < n1; i++) {
 		int x;
 		scanf("%d", &x);
+		cout << x << " ";
 		sum1 += x;
 	}
-
+	cout << endl;
 	cout << "sum1 = " << sum1 << endl;		//ThisIsForDebuggingPurposes
 
 	freopen("in2.txt", "r", stdin);
@@ -26,8 +27,10 @@ int main()
 	for (int i = 0; i < n2; i++) {
 		int x;
 		scanf("%d", &x);
+		cout << x << " ";
 		sum2 += x;
 	}
+	cout << endl;
 
 	cout << "sum2 = " << sum2 << endl;		//ThisIsForDebuggingPurposes
 }
