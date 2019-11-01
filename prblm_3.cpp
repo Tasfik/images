@@ -13,16 +13,18 @@ using namespace std;
 #define EdgeMX NodeMX * NodeMX
 #define PI 2.0 * acos(0.0)
 
-const double typeCost[] = {20.0, 5.0};
+const double typeCost[] = {20.0, 5.0, 7.0};
 
 // car = 0
 // metro = 1
+// bikolpo bus = 2
+//uttara bus = 2
 
 
 vector <int> DhakaRoad[NodeMX], g[NodeMX], cost[NodeMX], type[NodeMX];
 map <PII, int> road;
 PII RoadList[NodeMX];
-int dist[NodeMX], path[NodeMX];
+int dist[NodeMX], path[NodeMX], pathType[NodeMX];
 
 void Dijkstra(int source) {
 	map<int, int> m;
@@ -31,6 +33,7 @@ void Dijkstra(int source) {
 	{
 		dist[i] = INT_MAX;
 		path[i] = -1;
+		pathType[i] = -1;
 	}
 
 	m[0] = source;
@@ -46,11 +49,13 @@ void Dijkstra(int source) {
 		for (int i = 0; i < g[u].size(); i++)
 		{
 			int v = g[u][i];
+			int pathTP = type[u][i];
 			int NewCost = dist[u] + cost[u][i];
 
 			if (NewCost < dist[v])
 			{
 				path[v] = u;
+				pathType[v] = pathTP;
 				dist[v] = NewCost;
 				m[NewCost] = v;
 			}
@@ -62,7 +67,7 @@ void PrintPath(int v) {
 	if (v == -1)
 		return;
 	PrintPath(path[v]);
-	cout << RoadList[v].first << " " << RoadList[v].second << endl;
+	cout << RoadList[v].first << "," << RoadList[v].second<< "," <<pathType[v] << endl;
 }
 
 
@@ -129,13 +134,25 @@ int main() {
 	RoadNo = scan(DhakaRoadMX, 0, RoadNo);
 	
 	cout << "read dhaka road" << endl;
-	cout << "NodeNo = " << RoadNo << endl;		//ThisIsForDebuggingPurposes
+	cout << "RoadNo = " << RoadNo << endl;		//ThisIsForDebuggingPurposes
 
 	freopen("Roadmap_DhakaMetroRail.txt", "r", stdin);
 	RoadNo = scan(MetroRailMX, 1, RoadNo);
 
 	cout << "read Metro Rail" << endl;
-	cout << "NodeNo = " << RoadNo << endl;		//ThisIsForDebuggingPurposes
+	cout << "RoadNo = " << RoadNo << endl;		//ThisIsForDebuggingPurposes
+
+	freopen("Roadmap_BikolpoBus.txt", "r", stdin);
+	RoadNo = scan(BikolpoBusRoadMX, 2, RoadNo);
+
+	cout << "read Uttara Bus" << endl;
+	cout << "RoadNo = " << RoadNo << endl;		//ThisIsForDebuggingPurposes
+
+	freopen("Roadmap_UttaraBus.txt", "r", stdin);
+	RoadNo = scan(UttaraBusRoadMX, 2, RoadNo);
+
+	cout << "read Bikolpo Bus" << endl;
+	cout << "RoadNo = " << RoadNo << endl;		//ThisIsForDebuggingPurposes
 
 	// freopen("in.txt", "r", stdin);
 	// double a, b, c, d;

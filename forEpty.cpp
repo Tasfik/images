@@ -14,7 +14,7 @@ int main()
 	IN
 	OUT
 
-	for ( ; ; ) {
+	for (int num = 1 ; ; num++) {
 		string s;
 		v.clear();
 		int cnt = 0;
@@ -25,9 +25,9 @@ int main()
 			v.push_back(s);
 		}
 
-		cout << v.size() << endl << "LON,LAT" << endl;
+		cout << "LON,LAT" << endl << "Start" << num << ",Start" << num << num << endl;
 		for (int i = 0; i < v.size(); i+=2)
 			cout << v[i] << "," << v[i+1] << endl;;
-		cout << endl;
+		cout << "End" << num << ",End" << num << num<< endl;
 	}
 }
