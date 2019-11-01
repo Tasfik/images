@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#define IN freopen("input.txt", "r", stdin);
+#define IN freopen("Routemap_BikolpoBus.txt", "r", stdin);
 #define OUT freopen("in.txt", "w", stdout);
 #define ll long long int
 #define PII pair <int, int>
@@ -14,7 +14,7 @@ int main()
 	IN
 	OUT
 
-	for (int i = 0; i < 49869; i++) {
+	for (int i = 0; i < 17; i++) {
 		string s;
 		v.clear();
 		int cnt = 0;

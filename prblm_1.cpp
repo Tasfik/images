@@ -54,7 +54,7 @@ void PrintPath(int v)
 	if (v == -1)
 		return;
 	PrintPath(path[v]);
-	cout << RoadList[v].first << " " << RoadList[v].second << endl;
+	printf("%lf,%lf\n", RoadList[v].first, RoadList[v].second);
 }
 
 
@@ -120,5 +120,6 @@ int main()
 
 	Dijkstra(source);
 
+	printf("LON,LAT\n");
 	PrintPath(destination);
 }
