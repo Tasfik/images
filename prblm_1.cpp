@@ -14,8 +14,7 @@ map <PII, int> road;
 PII RoadList[DhakaRoadMX];
 int dist[DhakaRoadNodeMX], path[DhakaRoadNodeMX];
 
-void Dijkstra(int source)
-{
+void Dijkstra(int source) {
 	map<int, int> m;
 	
 	for (int i = 1; i < DhakaRoadMX; i++)
@@ -49,14 +48,12 @@ void Dijkstra(int source)
 	}
 }
 
-void PrintPath(int v)
-{
+void PrintPath(int v) {
 	if (v == -1)
 		return;
 	PrintPath(path[v]);
 	printf("%lf,%lf\n", RoadList[v].first, RoadList[v].second);
 }
-
 
 double deg2rad(double deg) {
 	return deg * (PI / 180.0);
@@ -76,8 +73,7 @@ double distance(PII a, PII b) {
 	return R * d;
 }
 
-int main() 
-{
+int main() {
 	IN
 	OUT
 	int RoadNo = 0;
