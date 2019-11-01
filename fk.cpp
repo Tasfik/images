@@ -1,125 +1,181 @@
-// Program to find Dijkstra's shortest path using 
-// priority_queue in STL 
-#include<bits/stdc++.h> 
-using namespace std; 
-# define INF 0x3f3f3f3f 
+#include <bits/stdc++.h>
+using namespace std;
 
-// iPair ==> Integer Pair 
-typedef pair<int, int> iPair; 
+#define IN freopen("in.txt", "r", stdin);
+#define OUT freopen("out.txt", "w", stdout);
+#define ll long long int
+#define PII pair <double, double>
+#define DhakaRoadMX 50000
+#define BikolpoBusRoadMX 20
+#define UttaraBusRoadMX 20
+#define MetroRailMX 15
+#define NodeMX 5 * DhakaRoadMX
+#define EdgeMX NodeMX * NodeMX
+#define PI 2.0 * acos(0.0)
+#define NodeMX 5 * 50000
+#define PI 2.0 * acos(0.0)
+#define EPS 1e-10
 
-// This class represents a directed graph using 
-// adjacency list representation 
-class Graph 
-{ 
-	int V; // No. of vertices 
+const double typeCost[] = {20.0, 5.0, 7.0};
 
-	// In a weighted graph, we need to store vertex 
-	// and weight pair for every edge 
-	list< pair<int, int> > *adj; 
+// car = 0
+// metro = 1
+// bikolpo bus = 2
+//uttara bus = 2
 
-public: 
-	Graph(int V); // Constructor 
 
-	// function to add an edge to graph 
-	void addEdge(int u, int v, int w); 
+vector <int> g[NodeMX], type[NodeMX];
+vector <ll>  cost[NodeMX];
+map <PII, int> road;
+PII RoadList[NodeMX];
+int path[NodeMX], pathType[NodeMX];
+ll dist[NodeMX];
+map <ll, int> m;
 
-	// prints shortest path from s 
-	void shortestPath(int s); 
-}; 
+void Dijkstra(ll source) {
+	for (ll i = 1; i < NodeMX; i++)
+	{
+		dist[i] = LONG_LONG_MAX;
+		path[i] = -1;
+		pathType[i] = -1;
+	}
 
-// Allocates memory for adjacency list 
-Graph::Graph(int V) 
-{ 
-	this->V = V; 
-	adj = new list<iPair> [V]; 
-} 
+	m[0] = source;
+	dist[source] = 0;
 
-void Graph::addEdge(int u, int v, int w) 
-{ 
-	adj[u].push_back(make_pair(v, w)); 
-	adj[v].push_back(make_pair(u, w)); 
-} 
+	while (!m.empty()) {
+		map<ll, int>::iterator it = m.begin();
 
-// Prints shortest paths from src to all other vertices 
-void Graph::shortestPath(int src) 
-{ 
-	// Create a priority queue to store vertices that 
-	// are being preprocessed. This is weird syntax in C++. 
-	// Refer below link for details of this syntax 
-	// https://www.geeksforgeeks.org/implement-min-heap-using-stl/ 
-	priority_queue< iPair, vector <iPair> , greater<iPair> > pq; 
+		ll u = it->second;
+		m.erase(it);
 
-	// Create a vector for distances and initialize all 
-	// distances as infinite (INF) 
-	vector<int> dist(V, INF); 
+		for (ll i = 0; i < g[u].size(); i++)
+		{
+			ll v = g[u][i];
+			ll pathTP = type[u][i];
+			ll NewCost = dist[u] + cost[u][i];
 
-	// Insert source itself in priority queue and initialize 
-	// its distance as 0. 
-	pq.push(make_pair(0, src)); 
-	dist[src] = 0; 
+			if (NewCost < dist[v])
+			{
+				path[v] = u;
+				pathType[v] = pathTP;
+				dist[v] = NewCost;
+				m[NewCost] = v;
+			}
+		}
+	}
+}
 
-	/* Looping till priority queue becomes empty (or all 
-	distances are not finalized) */
-	while (!pq.empty()) 
-	{ 
-		// The first vertex in pair is the minimum distance 
-		// vertex, extract it from priority queue. 
-		// vertex label is stored in second of pair (it 
-		// has to be done this way to keep the vertices 
-		// sorted distance (distance must be first item 
-		// in pair) 
-		int u = pq.top().second; 
-		pq.pop(); 
+void PrintPath(ll v) {
+	if (v == -1)
+		return;
+	PrintPath(path[v]);
+	cout << RoadList[v].first << "," << RoadList[v].second<< "," << pathType[v] << endl;
+}
 
-		// 'i' is used to get all adjacent vertices of a vertex 
-		list< pair<int, int> >::iterator i; 
-		for (i = adj[u].begin(); i != adj[u].end(); ++i) 
-		{ 
-			// Get vertex label and weight of current adjacent 
-			// of u. 
-			int v = (*i).first; 
-			int weight = (*i).second; 
+double deg2rad(double deg) {
+	return deg * (PI / 180.0);
+}
 
-			// If there is shorted path to v through u. 
-			if (dist[v] > dist[u] + weight) 
-			{ 
-				// Updating distance of v 
-				dist[v] = dist[u] + weight; 
-				pq.push(make_pair(dist[v], v)); 
-			} 
-		} 
-	} 
+double square(double n) {
+	return n * n;
+}
 
-	// Print shortest distances stored in dist[] 
-	printf("Vertex Distance from Source\n"); 
-	for (int i = 0; i < V; ++i) 
-		printf("%d \t\t %d\n", i, dist[i]); 
-} 
+double distance(PII a, PII b) {
+	double R = 6371.0;
+	double dLat = deg2rad(a.first - b.first);
+	double dLon = deg2rad(a.second - b.second);
 
-// Driver program to test methods of graph class 
-int main() 
-{ 
-	// create the graph given in above fugure 
-	int V = 9; 
-	Graph g(V); 
+	double c = square(sin(dLat / 2.0)) + cos(deg2rad(a.first)) * cos(deg2rad(b.first)) * square(sin(dLon / 2.0));
+	double d = 2.0 * atan( sqrt(c) / sqrt(1.0 - c));
+	return R * d;
+}
 
-	// making above shown graph 
-	g.addEdge(0, 1, 4); 
-	g.addEdge(0, 7, 8); 
-	g.addEdge(1, 2, 8); 
-	g.addEdge(1, 7, 11); 
-	g.addEdge(2, 3, 7); 
-	g.addEdge(2, 8, 2); 
-	g.addEdge(2, 5, 4); 
-	g.addEdge(3, 4, 9); 
-	g.addEdge(3, 5, 14); 
-	g.addEdge(4, 5, 10); 
-	g.addEdge(5, 6, 2); 
-	g.addEdge(6, 7, 1); 
-	g.addEdge(6, 8, 6); 
-	g.addEdge(7, 8, 7); 
+ll check = 0;
 
-	g.shortestPath(0); 
+ll scan (ll limit, ll vehicle, ll RoadNo) {
+	for (ll i = 0; i < limit; i++) {
+		ll n;
+		scanf("%d", &n);
 
-	return 0; 
-} 
+		ll prevRoadNo, curRoadNo;
+		for (ll j = 0; j < n; j++){
+			double a, b;
+			scanf("%lf%lf", &a, &b);
+
+
+			check += (floor(a/100) > 0) + (floor(b/100) > 0);
+
+			if (road.find( PII(a, b) ) != road.end()) {
+				curRoadNo = road[ PII(a, b) ];
+			}
+			else {
+				road[ PII(a, b) ] = ++RoadNo;
+				curRoadNo = RoadNo;
+				RoadList[RoadNo] == PII(a, b);
+			}
+
+			if (j) {
+				g[curRoadNo].push_back(prevRoadNo);
+				g[prevRoadNo].push_back(curRoadNo);
+
+				type[curRoadNo].push_back(vehicle);
+				type[prevRoadNo].push_back(vehicle);
+
+				double dist = distance(RoadList[curRoadNo], RoadList[prevRoadNo]) * typeCost[vehicle];
+				cost[curRoadNo].push_back(dist);
+				cost[prevRoadNo].push_back(dist);
+			}
+			prevRoadNo = RoadNo;
+		}
+	}
+	return RoadNo;
+}
+
+int main() {
+	// OUT
+
+	ll RoadNo = 0;
+
+	freopen("Roadmap_Dhaka.txt", "r", stdin);
+	RoadNo = scan(DhakaRoadMX, 0, RoadNo);
+	
+	cout << "read dhaka road" << endl;
+	cout << "RoadNo = " << RoadNo << endl;		//ThisIsForDebuggingPurposes
+
+	freopen("Roadmap_DhakaMetroRail.txt", "r", stdin);
+	RoadNo = scan(MetroRailMX, 1, RoadNo);
+
+	cout << "read Metro Rail" << endl;
+	cout << "RoadNo = " << RoadNo << endl;		//ThisIsForDebuggingPurposes
+
+	freopen("Roadmap_BikolpoBus.txt", "r", stdin);
+	RoadNo = scan(BikolpoBusRoadMX, 2, RoadNo);
+
+	cout << "read Uttara Bus" << endl;
+	cout << "RoadNo = " << RoadNo << endl;		//ThisIsForDebuggingPurposes
+
+	freopen("Roadmap_UttaraBus.txt", "r", stdin);
+	RoadNo = scan(UttaraBusRoadMX, 2, RoadNo);
+
+	cout << "read Bikolpo Bus" << endl;
+	cout << "RoadNo = " << RoadNo << endl;		//ThisIsForDebuggingPurposes
+
+	cout << "check = " << check << endl;		//ThisIsForDebuggingPurposes
+
+	freopen("graph.txt", "w", stdout);
+	for (ll i = 0 ; i < 20; i++) {
+		for (ll j = 0; j < g[i].size(); j++) {
+			cout << i << " " << j << " " << cost[i][j] << endl;
+		}
+	}
+	// freopen("in.txt", "r", stdin);
+	// double a, b, c, d;
+	// scanf("%lf%lf %lf%lf", &a, &b, &c, &d);
+
+	// ll source = road[ PII(a, b) ], destination = road[ PII(c, d) ];
+
+	// Dijkstra(source);
+
+	// PrintPath(destination);
+}
