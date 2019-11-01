@@ -1,8 +1,8 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#define IN freopen("Routemap_BikolpoBus.txt", "r", stdin);
-#define OUT freopen("in.txt", "w", stdout);
+#define IN freopen("Routemap_BikolpoBus_Tasfik.txt", "r", stdin);
+#define OUT freopen("epty.txt", "w", stdout);
 #define ll long long int
 #define PII pair <int, int>
 #define MX 100001
@@ -25,9 +25,9 @@ int main()
 			v.push_back(s);
 		}
 
-		cout << v.size() << " ";
-		for (int i = 0; i < v.size(); i++)
-			cout << v[i] << " ";
+		cout << v.size() << endl << "LON,LAT" << endl;
+		for (int i = 0; i < v.size(); i+=2)
+			cout << v[i] << "," << v[i+1] << endl;;
 		cout << endl;
 	}
 }

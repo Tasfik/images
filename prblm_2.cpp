@@ -12,8 +12,19 @@ using namespace std;
 const double costCar = 20.0;
 const double costMetro = 5.0;
 
+// struct node {
+// 	double latitude, longitude, cost;
+// 	int type;	//car = 0, metro  = 1, bus = 2;
 
-vector <int> DhakaRoad[DhakaRoadMX], g[DhakaRoadNodeMX], cost[DhakaRoadNodeMX];
+// 	node (double lat = 0.0, double lon = 0.0, double cst = 0.0, int tp = 0) {
+// 		latitude = lat;
+// 		longitude = lon;
+// 		cost = cst;
+// 		type = tp;
+// 	}
+// };
+
+vector <int> DhakaRoad[DhakaRoadMX], g[DhakaRoadNodeMX], cost[DhakaRoadNodeMX], type[DhakaRoadNodeMX];
 map <PII, int> road;
 PII RoadList[DhakaRoadMX];
 int dist[DhakaRoadNodeMX], path[DhakaRoadNodeMX];
@@ -82,8 +93,9 @@ double distance(PII a, PII b) {
 
 int main() 
 {
-	IN
 	OUT
+
+	freopen("in.txt", "r", stdin);
 	int RoadNo = 0;
 	for (int i = 0; i < DhakaRoadMX; i++) {
 		int n;
@@ -106,7 +118,45 @@ int main()
 			if (j) {
 				g[curRoadNo].push_back(prevRoadNo);
 				g[prevRoadNo].push_back(curRoadNo);
-				double dist = distance(RoadList[curRoadNo], RoadList[prevRoadNo]);
+
+				type[curRoadNo].push_back(0);
+				type[prevRoadNo].push_back(0);
+
+				double dist = distance(RoadList[curRoadNo], RoadList[prevRoadNo]) * costCar;
+				cost[curRoadNo].push_back(dist);
+				cost[prevRoadNo].push_back(dist);
+
+			}
+			prevRoadNo = RoadNo;
+		}
+	}
+
+	for (int i = 0; i < DhakaRoadMX; i++) {
+		int n;
+		scanf("%d", &n);
+
+		int prevRoadNo, curRoadNo;
+		for (int j = 0; j < n; j++){
+			double a, b;
+			scanf("%lf%lf", &a, &b);
+
+			if (road.find( PII(a, b) ) != road.end()) {
+				curRoadNo = road[ PII(a, b) ];
+			}
+			else {
+				road[ PII(a, b) ] = ++RoadNo;
+				curRoadNo = RoadNo;
+				RoadList[RoadNo] == PII(a, b);
+			}
+
+			if (j) {
+				g[curRoadNo].push_back(prevRoadNo);
+				g[prevRoadNo].push_back(curRoadNo);
+
+				type[curRoadNo].push_back(0);
+				type[prevRoadNo].push_back(0);
+
+				double dist = distance(RoadList[curRoadNo], RoadList[prevRoadNo]) * costCar;
 				cost[curRoadNo].push_back(dist);
 				cost[prevRoadNo].push_back(dist);
 
