@@ -9,6 +9,10 @@ using namespace std;
 #define DhakaRoadNodeMX 260
 #define PI 2.0 * acos(0.0)
 
+const double costCar = 20.0;
+const double costMetro = 5.0;
+
+
 vector <int> DhakaRoad[DhakaRoadMX], g[DhakaRoadNodeMX], cost[DhakaRoadNodeMX];
 map <PII, int> road;
 PII RoadList[DhakaRoadMX];
