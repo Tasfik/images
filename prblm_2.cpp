@@ -17,6 +17,7 @@ const double multiply = 1000000.0;
 
 
 vector <int> g[NodeMX], type[NodeMX];
+vector <PII> points;
 vector <ll>  cost[NodeMX];
 map <PII, int> road;
 PII RoadList[NodeMX];
@@ -113,6 +114,7 @@ int scan (int vehicle, int RoadNo) {
 			else {
 				road[ PII(a, b) ] = ++RoadNo;
 				curRoadNo = RoadNo;
+				points.push_back( PII(a, b) );
 				RoadList[RoadNo] = PII(a, b);
 			}
 
@@ -131,6 +133,22 @@ int scan (int vehicle, int RoadNo) {
 		}
 	}
 	return RoadNo;
+}
+
+bool cmp (PII a, PII b, PII c) {
+	double d1 = distance (a, c) * multiply;
+	double d2 = distance (b, c) * multiply;
+
+	return (d1 - d2 <= EPS);
+}
+
+int findPoint(PII p) {
+	if (road.find(p) != road.end())
+		return road[p];
+
+	sort(points.begin(), points.end(), cmp(p));
+
+	return road[ points[0] ];
 }
 
 int main() {
@@ -152,10 +170,14 @@ int main() {
 	// double b = 23.828335;
 	// double c = 90.36315;
 	// double d = 23.804896;
-	int source = road[ PII(a, b) ], destination = road[ PII(c, d) ];
+	int source = findPoint(PII(a, b)), destination = findPoint(PII(c, d));
 
 	cout << "source = " << source << endl;		//ThisIsForDebuggingPurposes
 	cout << "destination = " << destination << endl;		//ThisIsForDebuggingPurposes
+
+	source = findPoint(source);
+	destination = findPoint(destination);
+
 
 	Dijkstra(source);
 
