@@ -11,7 +11,7 @@ using namespace std;
 #define EPS 1e-10
 
 const double typeCost[] = {20.0, 5.0};
-
+const double multiply = 1000000.0;
 // car = 0
 // metro = 1
 
@@ -38,6 +38,8 @@ void Dijkstra(int source) {
 	while (!m.empty()) {
 		map<ll, int>::iterator it = m.begin();
 
+//		cout << "running" << endl;
+
 		int u = it->second;
 		m.erase(it);
 
@@ -58,11 +60,23 @@ void Dijkstra(int source) {
 	}
 }
 
-void PrintPath(int v) {
+int PrintPath(int v) {
 	if (v == -1)
-		return;
-	PrintPath(path[v]);
-	cout << RoadList[v].first << "," << RoadList[v].second<< "," << pathType[v] << endl;
+		return 1;
+	
+	int val = PrintPath(path[v]);
+
+	if (val == 2)
+		cout << pathType[v] << endl;
+
+	cout << RoadList[v].first << "," << RoadList[v].second<< ",";
+
+	if (val == 1)
+		return 2;
+	else
+		cout << pathType[v] << endl;
+
+	return 0;
 }
 
 double deg2rad(double deg) {
@@ -85,7 +99,7 @@ double distance(PII a, PII b) {
 
 int scan (int vehicle, int RoadNo) {
 	int n;
-	while (scanf("%d", &n)) {
+	while (scanf("%d", &n) != EOF) {
 		n /= 2;
 
 		int prevRoadNo = -1, curRoadNo = -2;
@@ -109,7 +123,7 @@ int scan (int vehicle, int RoadNo) {
 				type[curRoadNo].push_back(vehicle);
 				type[prevRoadNo].push_back(vehicle);
 
-				double dist = distance(RoadList[curRoadNo], RoadList[prevRoadNo]) * typeCost[vehicle];
+				double dist = distance(RoadList[curRoadNo], RoadList[prevRoadNo]) * typeCost[vehicle] * multiply;
 				cost[curRoadNo].push_back(dist);
 				cost[prevRoadNo].push_back(dist);
 			}
@@ -120,14 +134,16 @@ int scan (int vehicle, int RoadNo) {
 }
 
 int main() {
-	
 
+	// cout << "comeOn" << endl;
 	freopen("Roadmap_Dhaka.txt", "r", stdin);
 	int RoadNo = scan(0, 0);
 
+	// cout <<"scan1" << endl;
+
 	freopen("Roadmap_DhakaMetroRail.txt", "r", stdin);
 	RoadNo = scan(1, RoadNo);
-	
+
 	freopen("input.txt", "r", stdin);
 	double a, b, c, d;
 	scanf("%lf%lf %lf%lf", &a, &b, &c, &d);

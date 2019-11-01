@@ -98,7 +98,8 @@ double distance(PII a, PII b) {
 	return R * d;
 }
 
-int scan (int vehicle, int RoadNo) {
+int cnt = 0;
+int scan (int vehicle, int RoadNo, int work) {
 	int n;
 	while (scanf("%d", &n) != EOF) {
 		n /= 2;
@@ -108,58 +109,54 @@ int scan (int vehicle, int RoadNo) {
 			double a, b;
 			scanf("%lf%lf", &a, &b);
 
-			if (road.find( PII(a, b) ) != road.end()) {
-				curRoadNo = road[ PII(a, b) ];
+			if (work == 0) {
+				if (road.find( PII(a, b) ) != road.end()) {
+					curRoadNo = road[ PII(a, b) ];
+				}
+				else {
+					road[ PII(a, b) ] = ++RoadNo;
+					curRoadNo = RoadNo;
+					RoadList[RoadNo] = PII(a, b);
+				}
 			}
 			else {
-				road[ PII(a, b) ] = ++RoadNo;
-				curRoadNo = RoadNo;
-				RoadList[RoadNo] = PII(a, b);
+				if (road.find( PII(a, b) ) != road.end()) {
+					cout << a << "," << b << endl;
+					cnt++;
+				}
 			}
-
-			if (j) {
-				g[curRoadNo].push_back(prevRoadNo);
-				g[prevRoadNo].push_back(curRoadNo);
-
-				type[curRoadNo].push_back(vehicle);
-				type[prevRoadNo].push_back(vehicle);
-
-				double dist = distance(RoadList[curRoadNo], RoadList[prevRoadNo]) * typeCost[vehicle] * multiply;
-				cost[curRoadNo].push_back(dist);
-				cost[prevRoadNo].push_back(dist);
-			}
-			prevRoadNo = curRoadNo;
 		}
 	}
 	return RoadNo;
 }
 
 int main() {
-	freopen("output.txt", "w", stdout);
+
+	freopen("intersect.txt", "w", stdout);
 
 	freopen("Roadmap_Dhaka.txt", "r", stdin);
-	int RoadNo = scan(0, 0);
+	int RoadNo = scan(0, 0, 0);
 
 	freopen("Roadmap_DhakaMetroRail.txt", "r", stdin);
-	RoadNo = scan(1, RoadNo);
+	RoadNo = scan(1, RoadNo, 1);
 
-	freopen("Roadmap_BikolpoBus.txt", "r", stdin);
-	RoadNo = scan(2, RoadNo);
+	// freopen("Roadmap_BikolpoBus.txt", "r", stdin);
+	// RoadNo = scan(2, RoadNo);
 
-	freopen("Roadmap_UttaraBus.txt", "r", stdin);
-	RoadNo = scan(2, RoadNo);
+	// freopen("Roadmap_UttaraBus.txt", "r", stdin);
+	// RoadNo = scan(2, RoadNo);
 	
-	freopen("input.txt", "r", stdin);
-	double a, b, c, d;
-	scanf("%lf%lf %lf%lf", &a, &b, &c, &d);
+	// freopen("input.txt", "r", stdin);
+	// double a, b, c, d;
+	// scanf("%lf%lf %lf%lf", &a, &b, &c, &d);
 
-	// double a = 90.364255;
-	// double b = 23.828335;
-	// double c = 90.36315;
-	// double d = 23.804896;
-	int source = road[ PII(a, b) ], destination = road[ PII(c, d) ];
+	// // double a = 90.364255;
+	// // double b = 23.828335;
+	// // double c = 90.36315;
+	// // double d = 23.804896;
+	// int source = road[ PII(a, b) ], destination = road[ PII(c, d) ];
 
-	Dijkstra(source);
+	// Dijkstra(source);
 
-	PrintPath(destination);
+	// PrintPath(destination);
 }
