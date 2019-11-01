@@ -15,7 +15,7 @@ const double multiply = 1000000.0;
 // car = 0
 // metro = 1
 
-
+int flag[2];
 vector <int> g[NodeMX], type[NodeMX];
 vector <PII> points;
 vector <ll>  cost[NodeMX];
@@ -67,10 +67,11 @@ int PrintPath(int v) {
 	
 	int val = PrintPath(path[v]);
 
+	
 	if (val == 2)
 		cout << pathType[v] << endl;
 
-	cout << RoadList[v].first << "," << RoadList[v].second<< ",";
+	cout << setprecision(7) << fixed << RoadList[v].first << "," << setprecision(7) << fixed << RoadList[v].second<< ",";
 
 	if (val == 1)
 		return 2;
@@ -135,18 +136,21 @@ int scan (int vehicle, int RoadNo) {
 	return RoadNo;
 }
 
-bool cmp (PII a, PII b, PII c) {
-	double d1 = distance (a, c) * multiply;
-	double d2 = distance (b, c) * multiply;
+PII cmpPair;
+bool cmp(PII a, PII b) {
+	double d1 = distance (a, cmpPair) * multiply;
+	double d2 = distance (b, cmpPair) * multiply;
 
 	return (d1 - d2 <= EPS);
 }
 
-int findPoint(PII p) {
+int findPoint(PII p, int n) {
 	if (road.find(p) != road.end())
 		return road[p];
 
-	sort(points.begin(), points.end(), cmp(p));
+	flag[n] = 0;
+	cmpPair = p;
+	sort(points.begin(), points.end(), cmp);
 
 	return road[ points[0] ];
 }
@@ -170,17 +174,22 @@ int main() {
 	// double b = 23.828335;
 	// double c = 90.36315;
 	// double d = 23.804896;
-	int source = findPoint(PII(a, b)), destination = findPoint(PII(c, d));
+	flag[0] = flag[1] = 1;
+	int source = findPoint(PII(a, b), 0), destination = findPoint(PII(c, d), 1);
+	
 
 	cout << "source = " << source << endl;		//ThisIsForDebuggingPurposes
 	cout << "destination = " << destination << endl;		//ThisIsForDebuggingPurposes
 
-	source = findPoint(source);
-	destination = findPoint(destination);
-
-
 	Dijkstra(source);
 
 	freopen("output.txt", "w", stdout);
+
+	if (!flag[0])
+		cout << setprecision(7) << fixed << a << "," << setprecision(7) << fixed << b << ",3" << endl;
+	
 	PrintPath(destination);
+
+	if (!flag[1])
+		cout << setprecision(7) << fixed << c << "," << setprecision(7) << fixed << d << ",3" << endl;
 }
