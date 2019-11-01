@@ -67,9 +67,8 @@ void PrintPath(int v) {
 	if (v == -1)
 		return;
 	PrintPath(path[v]);
-	cout << RoadList[v].first << "," << RoadList[v].second<< "," <<pathType[v] << endl;
+	cout << RoadList[v].first << "," << RoadList[v].second<< "," << pathType[v] << endl;
 }
-
 
 double deg2rad(double deg) {
 	return deg * (PI / 180.0);

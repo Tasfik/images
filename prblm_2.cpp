@@ -22,7 +22,7 @@ const double typeCost[] = {20.0, 5.0};
 vector <int> DhakaRoad[NodeMX], g[NodeMX], cost[NodeMX], type[NodeMX];
 map <PII, int> road;
 PII RoadList[NodeMX];
-int dist[NodeMX], path[NodeMX];
+int dist[NodeMX], path[NodeMX], pathType[NodeMX];
 
 void Dijkstra(int source) {
 	map<int, int> m;
@@ -31,6 +31,7 @@ void Dijkstra(int source) {
 	{
 		dist[i] = INT_MAX;
 		path[i] = -1;
+		pathType[i] = -1;
 	}
 
 	m[0] = source;
@@ -46,11 +47,13 @@ void Dijkstra(int source) {
 		for (int i = 0; i < g[u].size(); i++)
 		{
 			int v = g[u][i];
+			int pathTP = type[u][i];
 			int NewCost = dist[u] + cost[u][i];
 
 			if (NewCost < dist[v])
 			{
 				path[v] = u;
+				pathType[v] = pathTP;
 				dist[v] = NewCost;
 				m[NewCost] = v;
 			}
@@ -62,9 +65,8 @@ void PrintPath(int v) {
 	if (v == -1)
 		return;
 	PrintPath(path[v]);
-	cout << RoadList[v].first << " " << RoadList[v].second << endl;
+	cout << RoadList[v].first << "," << RoadList[v].second<< "," << pathType[v] << endl;
 }
-
 
 double deg2rad(double deg) {
 	return deg * (PI / 180.0);
