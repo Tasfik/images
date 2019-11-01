@@ -5,13 +5,10 @@ using namespace std;
 #define OUT freopen("out.txt", "w", stdout);
 #define ll long long int
 #define PII pair <double, double>
-#define DhakaRoadMX 49869
-#define BikolpoBusRoadMX 17
-#define UttaraBusRoadMX 19
-#define MetroRailMX 14
-#define NodeMX 1500
-#define EdgeMX NodeMX * NodeMX
+#define DhakaRoadMX 50000
+#define NodeMX 5 * DhakaRoadMX
 #define PI 2.0 * acos(0.0)
+#define EPS 1e-10
 
 const double typeCost[] = {20.0, 5.0};
 
@@ -19,17 +16,18 @@ const double typeCost[] = {20.0, 5.0};
 // metro = 1
 
 
-vector <int> DhakaRoad[NodeMX], g[NodeMX], cost[NodeMX], type[NodeMX];
+vector <int> g[NodeMX], type[NodeMX];
+vector <ll>  cost[NodeMX];
 map <PII, int> road;
 PII RoadList[NodeMX];
-int dist[NodeMX], path[NodeMX], pathType[NodeMX];
+int path[NodeMX], pathType[NodeMX];
+ll dist[NodeMX];
+map <ll, int> m;
 
 void Dijkstra(int source) {
-	map<int, int> m;
-	
-	for (int i = 1; i < DhakaRoadMX; i++)
+	for (int i = 1; i < NodeMX; i++)
 	{
-		dist[i] = INT_MAX;
+		dist[i] = LONG_LONG_MAX;
 		path[i] = -1;
 		pathType[i] = -1;
 	}
@@ -37,9 +35,8 @@ void Dijkstra(int source) {
 	m[0] = source;
 	dist[source] = 0;
 
-	while (!m.empty())
-	{
-		map<int, int>::iterator it = m.begin();
+	while (!m.empty()) {
+		map<ll, int>::iterator it = m.begin();
 
 		int u = it->second;
 		m.erase(it);
@@ -48,7 +45,7 @@ void Dijkstra(int source) {
 		{
 			int v = g[u][i];
 			int pathTP = type[u][i];
-			int NewCost = dist[u] + cost[u][i];
+			ll NewCost = (ll)(dist[u] + cost[u][i]);
 
 			if (NewCost < dist[v])
 			{
@@ -86,12 +83,12 @@ double distance(PII a, PII b) {
 	return R * d;
 }
 
-int scan (int limit, int vehicle, int RoadNo) {
-	for (int i = 0; i < limit; i++) {
-		int n;
-		scanf("%d", &n);
+int scan (int vehicle, int RoadNo) {
+	int n;
+	while (scanf("%d", &n)) {
+		n /= 2;
 
-		int prevRoadNo, curRoadNo;
+		int prevRoadNo = -1, curRoadNo = -2;
 		for (int j = 0; j < n; j++){
 			double a, b;
 			scanf("%lf%lf", &a, &b);
@@ -102,7 +99,7 @@ int scan (int limit, int vehicle, int RoadNo) {
 			else {
 				road[ PII(a, b) ] = ++RoadNo;
 				curRoadNo = RoadNo;
-				RoadList[RoadNo] == PII(a, b);
+				RoadList[RoadNo] = PII(a, b);
 			}
 
 			if (j) {
@@ -116,36 +113,36 @@ int scan (int limit, int vehicle, int RoadNo) {
 				cost[curRoadNo].push_back(dist);
 				cost[prevRoadNo].push_back(dist);
 			}
-			prevRoadNo = RoadNo;
+			prevRoadNo = curRoadNo;
 		}
 	}
 	return RoadNo;
 }
 
 int main() {
-	// OUT
-
-	int RoadNo = 0;
+	
 
 	freopen("Roadmap_Dhaka.txt", "r", stdin);
-	RoadNo = scan(DhakaRoadMX, 0, RoadNo);
-	
-	cout << "read dhaka road" << endl;
-	cout << "NodeNo = " << RoadNo << endl;		//ThisIsForDebuggingPurposes
+	int RoadNo = scan(0, 0);
 
 	freopen("Roadmap_DhakaMetroRail.txt", "r", stdin);
-	RoadNo = scan(MetroRailMX, 1, RoadNo);
+	RoadNo = scan(1, RoadNo);
+	
+	freopen("input.txt", "r", stdin);
+	double a, b, c, d;
+	scanf("%lf%lf %lf%lf", &a, &b, &c, &d);
 
-	cout << "read Metro Rail" << endl;
-	cout << "NodeNo = " << RoadNo << endl;		//ThisIsForDebuggingPurposes
+	// double a = 90.364255;
+	// double b = 23.828335;
+	// double c = 90.36315;
+	// double d = 23.804896;
+	int source = road[ PII(a, b) ], destination = road[ PII(c, d) ];
 
-	// freopen("in.txt", "r", stdin);
-	// double a, b, c, d;
-	// scanf("%lf%lf %lf%lf", &a, &b, &c, &d);
+	cout << "source = " << source << endl;		//ThisIsForDebuggingPurposes
+	cout << "destination = " << destination << endl;		//ThisIsForDebuggingPurposes
 
-	// int source = road[ PII(a, b) ], destination = road[ PII(c, d) ];
+	Dijkstra(source);
 
-	// Dijkstra(source);
-
-	// PrintPath(destination);
+	freopen("output.txt", "w", stdout);
+	PrintPath(destination);
 }

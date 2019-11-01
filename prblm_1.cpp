@@ -81,6 +81,7 @@ double distance(PII a, PII b) {
 
 int main() {
 	freopen("Roadmap_Dhaka.txt", "r", stdin);
+	freopen("output.txt", "w", stdout);
 	
 	int RoadNo = 0, n;
 	while (scanf("%d", &n) != EOF) {
