@@ -43,7 +43,7 @@ string getFormattedTime(int time) {
 	
 	string tp, s1, s2;
 
-	cout << "time = " << time << endl;		//ThisIsForDebuggingPurposes
+	// cout << "time = " << time << endl;		//ThisIsForDebuggingPurposes
 	if (time >= 12 * 60) {
 		time -= 12 * 60;
 		tp = "PM";
@@ -136,7 +136,7 @@ int PrintPath(int v) {
 	if (wait[v] > 0)
 		cout << "wait " << getFormattedTime(wait[v] / (int)multiply) << " minutes" << endl;
 
-	cout << setprecision(7) << fixed << RoadList[v].first << "," << setprecision(7) << fixed << RoadList[v].second << "," << getFormattedTime(dist[v] / (int)multiply) ;
+	cout << setprecision(7) << fixed << RoadList[v].first << "," << setprecision(7) << fixed << RoadList[v].second << "," << getFormattedTime(dist[v] / (int)multiply) << endl;
 
 	if (val == 1)
 		return 2;
@@ -192,7 +192,7 @@ int scan (int vehicle, int RoadNo) {
 				type[curRoadNo].push_back(vehicle);
 				type[prevRoadNo].push_back(vehicle);
 
-				double dist = distance(RoadList[curRoadNo], RoadList[prevRoadNo]) * speed * multiply;
+				double dist = distance(RoadList[curRoadNo], RoadList[prevRoadNo]) * multiply;
 				cost[curRoadNo].push_back(dist);
 				cost[prevRoadNo].push_back(dist);
 			}
@@ -241,8 +241,15 @@ int main() {
 	int h, m;
 	string s;
 	scanf("%lf%lf %lf%lf", &a, &b, &c, &d);
-	cin >> h >> m >> s;
+	cin >> h >> m;
+	
+	getchar();
+	cin >> s;
 
+	// cout << "a = " << a << endl;		//ThisIsForDebuggingPurposes
+	// cout << "b = " << b << endl;		//ThisIsForDebuggingPurposes
+	// cout << "c = " << c << endl;		//ThisIsForDebuggingPurposes
+	// cout << "d = " << d << endl;		//ThisIsForDebuggingPurposes
 	cout << "h = " << h << endl;		//ThisIsForDebuggingPurposes
 	cout << "m = " << m << endl;		//ThisIsForDebuggingPurposes
 	cout << "s = " << s << endl;		//ThisIsForDebuggingPurposes
@@ -263,10 +270,12 @@ int main() {
 	freopen("output.txt", "w", stdout);
 
 	if (!flag[0])
-		cout << setprecision(7) << fixed << a << "," << setprecision(7) << fixed << b << ",3" << endl;
+		cout << setprecision(7) << fixed << a << "," << setprecision(7) << fixed << b 
+			<< getFormattedTime(startingTime) << ",3" << endl;
 	
 	PrintPath(destination);
 
 	if (!flag[1])
-		cout << setprecision(7) << fixed << c << "," << setprecision(7) << fixed << d << ",3" << endl;
+		cout << setprecision(7) << fixed << c << "," << setprecision(7) << fixed << d <<","
+			<< getFormattedTime(distance(RoadList[destination], PII(c, d))) << ",3" << endl;
 }

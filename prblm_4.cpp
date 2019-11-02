@@ -136,7 +136,7 @@ int PrintPath(int v) {
 	if (wait[v] > 0)
 		cout << "wait " << getFormattedTime(wait[v] / (int)multiply) << " minutes" << endl;
 
-	cout << setprecision(7) << fixed << RoadList[v].first << "," << setprecision(7) << fixed << RoadList[v].second << "," << getFormattedTime(dist[v] / (int)multiply) ;
+	cout << setprecision(7) << fixed << RoadList[v].first << "," << setprecision(7) << fixed << RoadList[v].second << "," << getFormattedTime(dist[v] / (int)multiply) << endl;
 
 	if (val == 1)
 		return 2;
@@ -238,16 +238,16 @@ int main() {
 	
 	freopen("input.txt", "r", stdin);
 	double a, b, c, d;
-	int h, m;
-	string s;
+	// int h, m;
+	// string s;
 	scanf("%lf%lf %lf%lf", &a, &b, &c, &d);
-	cin >> h >> m >> s;
+	// cin >> h >> m >> s;
 
-	cout << "h = " << h << endl;		//ThisIsForDebuggingPurposes
-	cout << "m = " << m << endl;		//ThisIsForDebuggingPurposes
-	cout << "s = " << s << endl;		//ThisIsForDebuggingPurposes
+	// cout << "h = " << h << endl;		//ThisIsForDebuggingPurposes
+	// cout << "m = " << m << endl;		//ThisIsForDebuggingPurposes
+	// cout << "s = " << s << endl;		//ThisIsForDebuggingPurposes
 
-	startingTime = getTime(a, b, (s == "PM"));
+	// startingTime = getTime(a, b, (s == "PM"));
 	// double a = 90.364255;
 	// double b = 23.828335;
 	// double c = 90.36315;

@@ -137,19 +137,13 @@ int scan (int vehicle, int RoadNo) {
 	return RoadNo;
 }
 
-PII cmpPair, dest;
+
+PII cmpPair;
 bool cmp(PII a, PII b) {
 	double d1 = distance (a, cmpPair) * multiply;
 	double d2 = distance (b, cmpPair) * multiply;
-	double d3 = distance (a, b) * multiply;
-	double d4 = distance (a, dest) * multiply;
-	double d5 = distance (b, dest) * multiply;
-	
-	if (fabs (d1 - d2) <= d3 / 2.0) {
-		return (fabs(d4 - d5) <= EPS);
-	}
 
-	return (fabs(d1 - d2) <= EPS);
+	return (d1 - d2 <= EPS);
 }
 
 int findPoint(PII p, int n) {
@@ -164,20 +158,29 @@ int findPoint(PII p, int n) {
 }
 
 int main() {
-	freopen("output.txt", "w", stdout);
+	// int ser = 0;
 
 	freopen("Roadmap_Dhaka.txt", "r", stdin);
 	int RoadNo = scan(0, 0);
-
+	
+	// // cout << "ser++ = " << ser++ << endl;		//ThisIsForDebuggingPurposes
+	
 	freopen("Roadmap_DhakaMetroRail.txt", "r", stdin);
 	RoadNo = scan(1, RoadNo);
 
+	// // cout << "ser++ = " << ser++ << endl;		//ThisIsForDebuggingPurposes
+	
 	freopen("Roadmap_BikolpoBus.txt", "r", stdin);
 	RoadNo = scan(2, RoadNo);
 
+	// // cout << "ser++ = " << ser++ << endl;		//ThisIsForDebuggingPurposes
+	
 	freopen("Roadmap_UttaraBus.txt", "r", stdin);
 	RoadNo = scan(2, RoadNo);
 	
+	// // cout << "ser++ = " << ser++ << endl;		//ThisIsForDebuggingPurposes
+	
+	cout << "RoadNo = " << RoadNo << endl;		//ThisIsForDebuggingPurposes
 	freopen("input.txt", "r", stdin);
 	double a, b, c, d;
 	scanf("%lf%lf %lf%lf", &a, &b, &c, &d);

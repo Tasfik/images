@@ -12,7 +12,9 @@ using namespace std;
 
 const double multiply = 1000000.0;
 
+int flag[2];
 vector <int> g[NodeMX];
+vector <PII> points;
 vector <ll> cost[NodeMX];
 map <PII, int> road;
 PII RoadList[5 * DhakaRoadMX];
@@ -79,9 +81,28 @@ double distance(PII a, PII b) {
 }
 
 
+PII cmpPair;
+bool cmp(PII a, PII b) {
+	double d1 = distance (a, cmpPair) * multiply;
+	double d2 = distance (b, cmpPair) * multiply;
+
+	return (d1 - d2 <= EPS);
+}
+
+int findPoint(PII p, int n) {
+	if (road.find(p) != road.end())
+		return road[p];
+
+	flag[n] = 0;
+	cmpPair = p;
+	sort(points.begin(), points.end(), cmp);
+
+	return road[ points[0] ];
+}
+
+
 int main() {
 	freopen("Roadmap_Dhaka.txt", "r", stdin);
-	freopen("output.txt", "w", stdout);
 	
 	int RoadNo = 0, n;
 	while (scanf("%d", &n) != EOF) {
@@ -92,12 +113,15 @@ int main() {
 			double a, b;
 			scanf("%lf%lf", &a, &b);
 
+			// cout << "scanning" << endl;
+
 			if (road.find( PII(a, b) ) != road.end()) {
 				curRoadNo = road[ PII(a, b) ];
 			}
 			else {
 				road[ PII(a, b) ] = ++RoadNo;
 				curRoadNo = RoadNo;
+				points.push_back(PII(a, b));
 				RoadList[RoadNo] = PII(a, b);
 			}
 
@@ -117,6 +141,7 @@ int main() {
 		}
 	}
 
+	cout << "done" << endl;
 	freopen("input.txt", "r", stdin);
 	double a, b, c, d;
 	scanf("%lf%lf %lf%lf", &a, &b, &c, &d);
@@ -125,9 +150,22 @@ int main() {
 	// double b = 23.828335;
 	// double c = 90.36315;
 	// double d = 23.804896;
-	int source = road[ PII(a, b) ], destination = road[ PII(c, d) ];
+	flag[0] = flag[1] = 1;
+	int source = findPoint(PII(a, b), 0), destination = findPoint(PII(c, d), 1);
+	
+
+	cout << "source = " << source << endl;		//ThisIsForDebuggingPurposes
+	cout << "destination = " << destination << endl;		//ThisIsForDebuggingPurposes
 
 	Dijkstra(source);
 
+	freopen("output.txt", "w", stdout);
+
+	if (!flag[0])
+		cout << setprecision(7) << fixed << a << "," << setprecision(7) << fixed << b << endl;
+	
 	PrintPath(destination);
+
+	if (!flag[1])
+		cout << setprecision(7) << fixed << c << "," << setprecision(7) << fixed << d << endl;
 }
