@@ -183,7 +183,7 @@ int main() {
 
 	Dijkstra(source);
 
-	freopen("output.txt", "w", stdout);
+	freopen("output_2.txt", "w", stdout);
 
 	if (!flag[0])
 		cout << setprecision(7) << fixed << a << "," << setprecision(7) << fixed << b << ",3" << endl;

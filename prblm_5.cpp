@@ -39,7 +39,7 @@ int getTime (int hour, int minute, int type) {
 }
 
 string getFormattedTime(int time) {
-	time /= (int) multiply;
+	time = floor(time / multiply);
 	
 	string tp, s1, s2;
 
@@ -134,9 +134,9 @@ int PrintPath(int v) {
 		cout << pathType[v] << endl;
 	
 	if (wait[v] > 0)
-		cout << "wait " << getFormattedTime(wait[v] / (int)multiply) << " minutes" << endl;
+		cout << "wait " << getFormattedTime(wait[v]) << " minutes" << endl;
 
-	cout << setprecision(7) << fixed << RoadList[v].first << "," << setprecision(7) << fixed << RoadList[v].second << "," << getFormattedTime(dist[v] / (int)multiply) << endl;
+	cout << setprecision(7) << fixed << RoadList[v].first << "," << setprecision(7) << fixed << RoadList[v].second << "," << getFormattedTime(dist[v]) << endl;
 
 	if (val == 1)
 		return 2;
@@ -162,7 +162,7 @@ double distance(PII a, PII b) {
 
 	double c = square(sin(dLat / 2.0)) + cos(deg2rad(a.first)) * cos(deg2rad(b.first)) * square(sin(dLon / 2.0));
 	double d = 2.0 * atan( sqrt(c) / sqrt(1.0 - c));
-	return R * d;
+	return R * d * multiply;
 }
 
 int scan (int vehicle, int RoadNo) {
@@ -192,7 +192,7 @@ int scan (int vehicle, int RoadNo) {
 				type[curRoadNo].push_back(vehicle);
 				type[prevRoadNo].push_back(vehicle);
 
-				double dist = distance(RoadList[curRoadNo], RoadList[prevRoadNo]) * multiply;
+				double dist = distance(RoadList[curRoadNo], RoadList[prevRoadNo]);
 				cost[curRoadNo].push_back(dist);
 				cost[prevRoadNo].push_back(dist);
 			}
@@ -246,14 +246,6 @@ int main() {
 	getchar();
 	cin >> s;
 
-	// cout << "a = " << a << endl;		//ThisIsForDebuggingPurposes
-	// cout << "b = " << b << endl;		//ThisIsForDebuggingPurposes
-	// cout << "c = " << c << endl;		//ThisIsForDebuggingPurposes
-	// cout << "d = " << d << endl;		//ThisIsForDebuggingPurposes
-	cout << "h = " << h << endl;		//ThisIsForDebuggingPurposes
-	cout << "m = " << m << endl;		//ThisIsForDebuggingPurposes
-	cout << "s = " << s << endl;		//ThisIsForDebuggingPurposes
-
 	startingTime = getTime(a, b, (s == "PM"));
 	// double a = 90.364255;
 	// double b = 23.828335;
@@ -267,6 +259,7 @@ int main() {
 
 	Dijkstra(source);
 
+	
 	freopen("output.txt", "w", stdout);
 
 	if (!flag[0])
